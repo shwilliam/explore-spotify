@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <ExploreGraph :token="accessToken" />
+    <ExploreView :token="accessToken" />
   </div>
 </template>
 
 <script>
 import queryString from 'query-string';
 
-import ExploreGraph from './components/ExploreGraph.vue';
+import ExploreView from './components/ExploreView.vue';
 
 export default {
   name: 'app',
@@ -17,7 +17,7 @@ export default {
     };
   },
   components: {
-    ExploreGraph,
+    ExploreView,
   },
   created() {
     this.accessToken = queryString.parse(window.location.search).access_token;
@@ -28,3 +28,10 @@ export default {
   },
 };
 </script>
+
+<style>
+#app {
+  width: 100%;
+  height: 100%;
+}
+</style>

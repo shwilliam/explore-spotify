@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "d3-force": "^1.1.2",
     "query-string": "^6.2.0",
     "vue": "^2.5.17"
   },
