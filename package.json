@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "start": "node server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "d3-force": "^1.1.2",
+    "express": "^4.16.4",
     "query-string": "^6.2.0",
     "vue": "^2.5.17"
   },
