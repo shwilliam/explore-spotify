@@ -1,7 +1,7 @@
 <template>
   <div class="explore-graph">
     <span class="loading" v-if="loading && !error">loading...</span>
-    <span class="error" v-if="error">please refresh to try again</span>
+    <span class="error" v-if="error">please click <a href="/">here</a> to try again</span>
     <Graph
       v-if="recommendations"
       :nodes="recommendations"
@@ -19,7 +19,7 @@ const baseUrl = 'https://api.spotify.com/v1';
 
 export default {
   name: 'explore-graph',
-  props: ['token'],
+  props: ['token', 'initialTrackID'],
   components: {
     Graph,
   },
@@ -34,22 +34,20 @@ export default {
     };
   },
   created() {
-    this.initGraph();
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+    this.initGraph();
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     initGraph() {
-      // fetch initial recommendations, make links to center node
-      this.fetchRecommendedTracks()
+      this.fetchRecommendedTracks(this.initialTrackID)
         .then(res => res.json())
         .then(({ tracks }) => {
           const links = [];
-          const recommendations = [{ id: '' }]; // center node
-
+          const recommendations = [{ id: this.initialTrackID }]; // center node
           tracks.map((track) => {
             recommendations.push(track);
             links.push({
@@ -70,10 +68,9 @@ export default {
           this.loading = false;
         });
     },
-    fetchRecommendedTracks(limit = 10, trackSeed = '2wq3IABSPtBFush3qsfZoK') {
-      // defaults to Belle and Sebastian's 'Step Into My Office, Baby'
+    fetchRecommendedTracks(trackSeed, limit = 10) {
       return fetch(
-        `${baseUrl}/recommendations?limit=${limit}&seed_tracks=${trackSeed}`,
+        `${baseUrl}/recommendations?seed_tracks=${trackSeed}&limit=${limit}`,
         {
           headers: { Authorization: `Bearer ${this.token}` },
         },
@@ -81,22 +78,32 @@ export default {
     },
     handleNodeClick(id) {
       this.loading = true;
-      const clickedNodeIndex = this.recommendations.filter(track => track.id === id)[0].index;
+      const clickedNodeIndex = this.recommendations.filter(
+        track => track.id === id,
+      )[0].index;
 
-      this.clickedTracks.push(id); // TODO: limit to 5
-      const allClickedTracks = this.clickedTracks.join(',');
+      let { clickedTracks } = this;
+      if (clickedTracks.length === 5) {
+        clickedTracks = clickedTracks.slice(1, 5);
+      }
+      clickedTracks.push(id);
 
-      this.fetchRecommendedTracks(10, allClickedTracks)
+      const allClickedTracks = clickedTracks.join(',');
+      this.fetchRecommendedTracks(allClickedTracks)
         .then(res => res.json())
         .then(({ tracks }) => {
           const indexOffset = this.recommendations.length;
 
           tracks.map((track) => {
             this.recommendations = [...this.recommendations, track];
-            this.links = [...this.links, {
-              source: clickedNodeIndex,
-              target: tracks.indexOf(track) + indexOffset,
-            }];
+            this.links = [
+              ...this.links,
+              {
+                source: clickedNodeIndex,
+                target: tracks.indexOf(track) + indexOffset,
+              },
+            ];
+            return { recommendations: this.recommendations, links: this.links };
           });
         })
         .catch((err) => {
@@ -111,6 +118,9 @@ export default {
       this.windowSize.width = window.innerWidth;
       this.windowSize.height = window.innerHeight;
     },
+  },
+  watch: {
+    initialTrackID: 'initGraph',
   },
 };
 </script>
