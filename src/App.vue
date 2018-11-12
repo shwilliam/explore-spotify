@@ -1,20 +1,15 @@
 <template>
-  <div id="app">
-    <ExploreView :token="accessToken" v-if="accessToken" />
-  </div>
+  <ExploreView :token="accessToken" v-if="accessToken" />
 </template>
 
 <script>
 import queryString from 'query-string';
-
 import ExploreView from './components/ExploreView.vue';
 
 export default {
   name: 'app',
   data() {
-    return {
-      accessToken: undefined,
-    };
+    return { accessToken: undefined };
   },
   components: {
     ExploreView,
@@ -30,8 +25,9 @@ export default {
 </script>
 
 <style>
-#app {
-  width: 100%;
-  height: 100%;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 </style>

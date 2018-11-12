@@ -1,6 +1,6 @@
 <template>
-  <svg class="graph" @click="handleClick" :width="width" :height="height">
-    <g :transform="`translate(${width / 2}, ${height / 2})`" >
+  <svg class="graph" @click="handleClick" :height="size.height" :width="size.width">
+    <g :transform="`translate(${size.width / 2}, ${size.height / 2})`" >
       <g class="links">
         <line
           v-for="link in links"
@@ -20,12 +20,12 @@
           :transform="`translate(${node.x || 0}, ${node.y || 0})`"
           :key="`node-${nodes.indexOf(node)}`"
         >
-          <text :key="`node.name`">{{node.name}}</text>
+          <text :key="node.name">{{node.name}}</text>
           <circle
             :id="node.id"
             class="node"
             r="8"
-            fill="crimson"
+            fill="#1ED760"
             :key="`circle-${node.id}`"
           />
         </g>
@@ -48,7 +48,7 @@ import {
 
 export default {
   name: 'graph',
-  props: ['nodes', 'links', 'width', 'height'],
+  props: ['nodes', 'links', 'size'],
   data() {
     return {
       renderTrigger: 0,
@@ -82,7 +82,7 @@ export default {
       }
     },
     rerender() {
-      // update 'key' value of links to force rerender
+      // update 'key' attr to force rerender
       this.renderTrigger += 1;
     },
   },
