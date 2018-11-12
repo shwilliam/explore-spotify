@@ -1,31 +1,19 @@
 <template>
   <div class="explore-graph">
     <span v-if="loading">loading...</span>
-    <div v-else>
-      <Graph
-        :nodes="recommendations"
-        :links="links"
-        :force="force"
-        :key="updateTrigger"
-        width="300"
-        height="300"
-        @click="handleNodeClick"
-      />
-    </div>
     <span v-if="errored">please refresh to try again</span>
+    <Graph
+      v-if="recommendations"
+      :nodes="recommendations"
+      :links="links"
+      width="300"
+      height="300"
+      @click="handleNodeClick"
+    />
   </div>
 </template>
 
 <script>
-import {
-  forceCenter,
-  forceLink,
-  forceManyBody,
-  forceSimulation,
-  forceX,
-  forceY,
-} from 'd3-force';
-
 import Graph from './Graph.vue';
 
 const baseUrl = 'https://api.spotify.com/v1';
@@ -43,19 +31,7 @@ export default {
       clickedTracks: [],
       errored: null,
       loading: true,
-      updateTrigger: 0,
     };
-  },
-  computed: {
-    force() {
-      return forceSimulation(this.recommendations)
-        .force('charge', forceManyBody().strength(-100))
-        .force('forceX', forceX().strength(0.2))
-        .force('forceY', forceY().strength(0.1))
-        .force('center', forceCenter())
-        .force('link', forceLink().links(this.links))
-        .on('tick', this.rerender);
-    },
   },
   created() {
     // fetch initial recommendations, make links to center node
@@ -100,7 +76,7 @@ export default {
       this.loading = true;
       const clickedNodeIndex = this.recommendations.filter(track => track.id === id)[0].index;
 
-      this.clickedTracks.push(id);
+      this.clickedTracks.push(id); // TODO: limit to 5
       const allClickedTracks = this.clickedTracks.join(',');
 
       this.fetchRecommendedTracks(10, allClickedTracks)
@@ -109,11 +85,11 @@ export default {
           const indexOffset = this.recommendations.length;
 
           tracks.map((track) => {
-            this.recommendations.push(track);
-            this.links.push({
+            this.recommendations = [...this.recommendations, track];
+            this.links = [...this.links, {
               source: clickedNodeIndex,
               target: tracks.indexOf(track) + indexOffset,
-            });
+            }];
           });
         })
         .catch((err) => {
@@ -123,10 +99,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    rerender() {
-      // update attr value of 'key', force rerender
-      this.updateTrigger += 1;
     },
   },
 };

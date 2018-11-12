@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ExploreView :token="accessToken" />
+    <ExploreView :token="accessToken" v-if="accessToken" />
   </div>
 </template>
 
