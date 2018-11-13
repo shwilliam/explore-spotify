@@ -17,6 +17,7 @@
         <g
           v-for="node in nodes"
           class="node"
+          v-if="node.popularity"
           :transform="`translate(${node.x || 0}, ${node.y || 0})`"
           :key="`node-${nodes.indexOf(node)}`"
         >
@@ -24,8 +25,8 @@
           <circle
             :id="node.id"
             class="node"
-            r="8"
-            fill="#1ED760"
+            :r="node.popularity / 2"
+            :fill="`hsl(${120 * (node.popularity/100)}, 100%, 50%)`"
             :key="`circle-${node.id}`"
           />
         </g>
@@ -57,19 +58,17 @@ export default {
   },
   beforeMount() {
     this.force = forceSimulation(this.nodes)
-      .force('charge', forceManyBody().strength(-100))
-      .force('forceX', forceX().strength(0.1))
-      .force('forceY', forceY().strength(0.1))
+      .force('charge', forceManyBody().strength(-1200))
+      .force('forceX', forceX().strength(0.4))
+      .force('forceY', forceY().strength(0.6)) // optimized for landscape-oriented window
       .force('center', forceCenter())
       .force('link', forceLink().links(this.links))
-      .alphaDecay(0.4)
-      .alphaTarget(0.1)
+      .alphaDecay(0.9)
       .on('tick', this.rerender);
   },
   beforeUpdate() {
-    this.force.stop();
     this.force
-      .alpha(0.5)
+      .alpha(0.7)
       .nodes(this.nodes)
       .force('link')
       .links(this.links);
