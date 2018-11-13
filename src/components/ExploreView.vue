@@ -49,20 +49,21 @@ export default {
         .then(({ tracks }) => {
           const links = [];
           const recommendations = [{ id, popularity }]; // center node
-          tracks.map(track => {
+          tracks.map((track) => {
             recommendations.push(track);
-            track.popularity &&
+            if (track.popularity) {
               links.push({
                 source: 0,
                 target: recommendations.indexOf(track),
               });
+            }
             return { recommendations, links };
           });
 
           this.links = links;
           this.recommendations = recommendations;
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = true;
           return console.error(err);
         })
@@ -96,7 +97,7 @@ export default {
         .then(({ tracks }) => {
           const indexOffset = this.recommendations.length;
 
-          tracks.map(track => {
+          tracks.map((track) => {
             this.recommendations = [...this.recommendations, track];
             this.links = [
               ...this.links,
@@ -108,7 +109,7 @@ export default {
             return { recommendations: this.recommendations, links: this.links };
           });
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = true;
           return console.error(err);
         })

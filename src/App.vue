@@ -40,8 +40,7 @@ export default {
     this.accessToken = queryString.parse(window.location.search).access_token;
 
     if (!this.accessToken) {
-      window.location.href =
-        'https://explore-spotify-login.herokuapp.com/login';
+      window.location.href = 'https://explore-spotify-login.herokuapp.com/login';
     }
   },
 };

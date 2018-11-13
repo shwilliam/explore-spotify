@@ -5,7 +5,6 @@
         <g
           v-for="result in results"
           class="result"
-          v-if="result.popularity"
           :transform="`translate(${result.x || 0}, ${result.y || 0})`"
           :key="`result-${results.indexOf(result)}`"
         >
@@ -29,7 +28,6 @@
 <script>
 import {
   forceCenter,
-  forceLink,
   forceManyBody,
   forceSimulation,
   forceX,

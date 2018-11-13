@@ -35,10 +35,10 @@ export default {
       this.loading = true;
       this.fetchTracks(query)
         .then(res => res.json())
-        .then(data => {
+        .then((data) => {
           this.searchResults = data.tracks.items;
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = true;
           return console.error(err);
         })
@@ -72,4 +72,3 @@ div.search-view {
   text-align: center;
 }
 </style>
-
