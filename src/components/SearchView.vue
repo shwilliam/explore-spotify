@@ -27,18 +27,18 @@ export default {
     };
   },
   methods: {
-    addNode(id) {
+    addNode({ id, popularity }) {
       this.searchResults = [];
-      this.$emit('select', id);
+      this.$emit('select', { id, popularity });
     },
     fetchSearchResults(query) {
       this.loading = true;
       this.fetchTracks(query)
         .then(res => res.json())
-        .then((data) => {
+        .then(data => {
           this.searchResults = data.tracks.items;
         })
-        .catch((err) => {
+        .catch(err => {
           this.error = true;
           return console.error(err);
         })

@@ -17,7 +17,7 @@ import Graph from './Graph.vue';
 
 export default {
   name: 'explore-graph',
-  props: ['token', 'initialTrackId'],
+  props: ['token', 'initialTrackProps'],
   components: {
     Graph,
   },
@@ -34,31 +34,32 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
-    this.initGraph(this.initialTrackId);
+    this.initGraph(this.initialTrackProps);
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    initGraph(initialTrackId) {
-      this.fetchRecommendedTracks(initialTrackId)
+    initGraph({ id, popularity }) {
+      this.fetchRecommendedTracks(id)
         .then(res => res.json())
         .then(({ tracks }) => {
           const links = [];
-          const recommendations = [{ id: initialTrackId }]; // center node
-          tracks.map((track) => {
+          const recommendations = [{ id, popularity }]; // center node
+          tracks.map(track => {
             recommendations.push(track);
-            links.push({
-              source: 0,
-              target: recommendations.indexOf(track),
-            });
+            track.popularity &&
+              links.push({
+                source: 0,
+                target: recommendations.indexOf(track),
+              });
             return { recommendations, links };
           });
 
           this.links = links;
           this.recommendations = recommendations;
         })
-        .catch((err) => {
+        .catch(err => {
           this.error = true;
           return console.error(err);
         })
@@ -92,7 +93,7 @@ export default {
         .then(({ tracks }) => {
           const indexOffset = this.recommendations.length;
 
-          tracks.map((track) => {
+          tracks.map(track => {
             this.recommendations = [...this.recommendations, track];
             this.links = [
               ...this.links,
@@ -104,7 +105,7 @@ export default {
             return { recommendations: this.recommendations, links: this.links };
           });
         })
-        .catch((err) => {
+        .catch(err => {
           this.error = true;
           return console.error(err);
         })
@@ -118,7 +119,7 @@ export default {
     },
   },
   watch: {
-    initialTrackId: 'initGraph',
+    initialTrackProps: 'initGraph',
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <ul class="search-results">
-    <li v-for="track in results" :key="track.id" @click="emitClick">
+    <li v-for="track in results" :key="track.id" @click="emitClick(track.id, track.popularity)">
       <span v-for="artist in track.album.artists" :key="artist.id" :id="track.id">
         {{artist.name}}
       </span>
@@ -14,8 +14,8 @@ export default {
   name: 'search-results',
   props: ['results'],
   methods: {
-    emitClick(e) {
-      this.$emit('click', e.target.id);
+    emitClick(id, popularity) {
+      this.$emit('click', { id, popularity });
     },
   },
 };

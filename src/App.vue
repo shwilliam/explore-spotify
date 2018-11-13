@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <SearchView :token="accessToken" @select="setInitialTrack" />
+    <SearchView :token="accessToken" @select="setInitialTrackProps" />
     <ExploreView
-      v-if="accessToken && initialTrackId"
-      :initialTrackId="initialTrackId"
+      v-if="accessToken && initialTrackProps"
+      :initialTrackProps="initialTrackProps"
       :token="accessToken"
     />
   </div>
@@ -24,19 +24,20 @@ export default {
   data() {
     return {
       accessToken: null,
-      initialTrackId: null,
+      initialTrackProps: null,
     };
   },
   methods: {
-    setInitialTrack(trackId) {
-      this.initialTrackId = trackId;
+    setInitialTrackProps({ id, popularity }) {
+      this.initialTrackProps = { id, popularity };
     },
   },
   created() {
     this.accessToken = queryString.parse(window.location.search).access_token;
 
     if (!this.accessToken) {
-      window.location.href = 'https://explore-spotify-login.herokuapp.com/login';
+      window.location.href =
+        'https://explore-spotify-login.herokuapp.com/login';
     }
   },
 };
