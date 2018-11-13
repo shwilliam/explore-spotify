@@ -1,10 +1,8 @@
 <template>
   <ul class="search-results">
     <li v-for="track in results" :key="track.id" @click="emitClick(track.id, track.popularity)">
-      <span v-for="artist in track.album.artists" :key="artist.id" :id="track.id">
-        {{artist.name}}
-      </span>
-      , {{track.name}}
+      {{track.name}}
+      <!-- TODO: make nodes -->
     </li>
   </ul>
 </template>
@@ -20,3 +18,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+li {
+  list-style: none;
+  cursor: pointer;
+}
+</style>

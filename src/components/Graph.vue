@@ -26,7 +26,7 @@
             :id="node.id"
             class="node"
             :r="node.popularity / 2"
-            :fill="`hsl(${120 * (node.popularity/100)}, 100%, 50%)`"
+            :fill="`hsl(${130 * (node.popularity/100)}, 100%, 50%)`"
             :key="`circle-${node.id}`"
           />
         </g>
@@ -58,7 +58,7 @@ export default {
   },
   beforeMount() {
     this.force = forceSimulation(this.nodes)
-      .force('charge', forceManyBody().strength(-1200))
+      .force('charge', forceManyBody().strength(-1200)) // TODO: correct to window resize
       .force('forceX', forceX().strength(0.4))
       .force('forceY', forceY().strength(0.6)) // optimized for landscape-oriented window
       .force('center', forceCenter())

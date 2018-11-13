@@ -1,7 +1,7 @@
 <template>
   <form class="search-input" @submit.prevent="makeSearch">
     <label for="query-input">
-      Search for a song:
+      <p>search for a song</p>
       <input v-model="input" type="text" name="query-input">
     </label>
   </form>

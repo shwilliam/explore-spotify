@@ -1,5 +1,8 @@
 <template>
   <div class="explore-graph">
+    <button @click="clearGraph" class="clear" v-if="recommendations">
+      clear
+    </button>
     <span class="loading" v-if="loading && !error">loading...</span>
     <span class="error" v-if="error">please click <a href="/">here</a> to try again</span>
     <Graph
@@ -117,9 +120,25 @@ export default {
       this.windowSize.width = window.innerWidth;
       this.windowSize.height = window.innerHeight;
     },
+    clearGraph() {
+      this.$emit('clear');
+    },
   },
   watch: {
     initialTrackProps: 'initGraph',
   },
 };
 </script>
+
+<style scoped>
+button.clear {
+  color: white;
+  background-color: black;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  border: none;
+  cursor: pointer;
+}
+</style>

@@ -3,8 +3,8 @@
     <span class="loading" v-if="loading && !error">loading...</span>
     <span class="error" v-if="error">please click <a href="/">here</a> to try again</span>
 
-    <SearchInput @search="fetchSearchResults" />
-    <SearchResults :results="searchResults" @click="addNode" />
+    <SearchInput v-if="!searchResults" @search="fetchSearchResults" />
+    <SearchResults v-else :results="searchResults" @click="addNode" />
   </div>
 </template>
 
@@ -57,3 +57,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+div.search-view {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+</style>
+

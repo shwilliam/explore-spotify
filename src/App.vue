@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
-    <SearchView :token="accessToken" @select="setInitialTrackProps" />
+  <div id="app" v-if="accessToken">
     <ExploreView
-      v-if="accessToken && initialTrackProps"
+      v-if="initialTrackProps"
       :initialTrackProps="initialTrackProps"
       :token="accessToken"
+      @clear="showSearchView"
     />
+    <SearchView v-else :token="accessToken" @select="setInitialTrackProps" />
   </div>
 </template>
 
@@ -30,6 +31,9 @@ export default {
   methods: {
     setInitialTrackProps({ id, popularity }) {
       this.initialTrackProps = { id, popularity };
+    },
+    showSearchView() {
+      this.initialTrackProps = null;
     },
   },
   created() {
