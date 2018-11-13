@@ -1,8 +1,8 @@
 <template>
   <form class="search-input" @submit.prevent="makeSearch">
-    <label for="track-search">
-      Search for a track:
-      <input v-model="input" type="text" name="track-search">
+    <label for="query-input">
+      Search for a song:
+      <input v-model="input" type="text" name="query-input">
     </label>
   </form>
 </template>
@@ -23,9 +23,10 @@ export default {
       const cleanedQuery = this.input
         .split(' ')
         .map(word => word.trim())
+        .filter(word => Boolean(word.length))
         .join('+');
 
-      this.$emit('search', cleanedQuery);
+      if (cleanedQuery.length) this.$emit('search', cleanedQuery);
     },
   },
   watch: {

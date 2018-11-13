@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-    <span class="loading" v-if="loading && !error">loading...</span>
-    <span class="error" v-if="error">please click <a href="/">here</a> to try again</span>
-    <SearchInput @search="handleSearch" />
-    <SearchResults :results="searchResults" @click="addNode" />
-
+    <SearchView :token="accessToken" @select="setInitialTrack" />
     <ExploreView
-      v-if="accessToken && initialTrackID"
-      :initialTrackID="initialTrackID"
+      v-if="accessToken && initialTrackId"
+      :initialTrackId="initialTrackId"
       :token="accessToken"
     />
   </div>
@@ -15,27 +11,26 @@
 
 <script>
 import queryString from 'query-string';
-import ExploreView from './components/ExploreView.vue';
-import SearchInput from './components/SearchInput.vue';
-import SearchResults from './components/SearchResults.vue';
 
-const baseUrl = 'https://api.spotify.com/v1';
+import ExploreView from './components/ExploreView.vue';
+import SearchView from './components/SearchView.vue';
 
 export default {
   name: 'app',
+  components: {
+    ExploreView,
+    SearchView,
+  },
   data() {
     return {
       accessToken: null,
-      initialTrackID: null,
-      searchResults: null,
-      loading: false,
-      error: false,
+      initialTrackId: null,
     };
   },
-  components: {
-    ExploreView,
-    SearchInput,
-    SearchResults,
+  methods: {
+    setInitialTrack(trackId) {
+      this.initialTrackId = trackId;
+    },
   },
   created() {
     this.accessToken = queryString.parse(window.location.search).access_token;
@@ -43,32 +38,6 @@ export default {
     if (!this.accessToken) {
       window.location.href = 'https://explore-spotify-login.herokuapp.com/login';
     }
-  },
-  methods: {
-    addNode(id) {
-      this.searchResults = [];
-      this.initialTrackID = id;
-    },
-    fetchTracks(query, type = 'track') {
-      return fetch(`${baseUrl}/search?q=${query}&type=${type}`, {
-        headers: { Authorization: `Bearer ${this.accessToken}` },
-      });
-    },
-    handleSearch(query) {
-      this.loading = true;
-      this.fetchTracks(query)
-        .then(res => res.json())
-        .then((data) => {
-          this.searchResults = data.tracks.items;
-        })
-        .catch((err) => {
-          this.error = true;
-          return console.error(err);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    },
   },
 };
 </script>
@@ -80,11 +49,18 @@ body {
   padding: 0;
   overflow: hidden;
 }
-
-div#app > span.loading,
-div#app > span.error {
+span.loading,
+span.error {
+  color: white;
   position: fixed;
-  top: 0;
+  z-index: 2;
+  bottom: 0;
   left: 0;
+}
+span.loading {
+  background-color: black;
+}
+span.error {
+  background-color: red;
 }
 </style>

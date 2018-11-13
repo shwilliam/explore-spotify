@@ -15,11 +15,9 @@
 <script>
 import Graph from './Graph.vue';
 
-const baseUrl = 'https://api.spotify.com/v1';
-
 export default {
   name: 'explore-graph',
-  props: ['token', 'initialTrackID'],
+  props: ['token', 'initialTrackId'],
   components: {
     Graph,
   },
@@ -36,18 +34,18 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
-    this.initGraph();
+    this.initGraph(this.initialTrackId);
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    initGraph() {
-      this.fetchRecommendedTracks(this.initialTrackID)
+    initGraph(initialTrackId) {
+      this.fetchRecommendedTracks(initialTrackId)
         .then(res => res.json())
         .then(({ tracks }) => {
           const links = [];
-          const recommendations = [{ id: this.initialTrackID }]; // center node
+          const recommendations = [{ id: initialTrackId }]; // center node
           tracks.map((track) => {
             recommendations.push(track);
             links.push({
@@ -70,7 +68,7 @@ export default {
     },
     fetchRecommendedTracks(trackSeed, limit = 10) {
       return fetch(
-        `${baseUrl}/recommendations?seed_tracks=${trackSeed}&limit=${limit}`,
+        `https://api.spotify.com/v1/recommendations?seed_tracks=${trackSeed}&limit=${limit}`,
         {
           headers: { Authorization: `Bearer ${this.token}` },
         },
@@ -120,16 +118,7 @@ export default {
     },
   },
   watch: {
-    initialTrackID: 'initGraph',
+    initialTrackId: 'initGraph',
   },
 };
 </script>
-
-<style scoped>
-span.loading,
-span.error {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-</style>
