@@ -3,8 +3,8 @@ import React from 'react';
 import { fetchRecommendations } from '../assets/helpers/spotify-helpers';
 import { initGraph, updateNodesAndLinks, stopForce } from '../assets/helpers/d3-helpers';
 
-import Node from './Node.jsx';
-import NodeLink from './NodeLink.jsx';
+import Node from './Node';
+import NodeLink from './NodeLink';
 
 class NodeGraph extends React.Component {
   constructor(props) {
@@ -70,7 +70,7 @@ class NodeGraph extends React.Component {
         updateNodesAndLinks(nodes, links, clickedTracks, state => this.setState(state));
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error); // eslint-disable-line
       });
   }
 

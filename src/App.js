@@ -1,12 +1,12 @@
 import React from 'react';
 
-import TrackSearch from './components/TrackSearch.jsx';
-import NodeGraph from './components/NodeGraph.jsx';
+import TrackSearch from './components/TrackSearch';
+import NodeGraph from './components/NodeGraph';
 
 import { initSpotifyAPI } from './assets/helpers/spotify-helpers';
 
 // TODO: make responsive
-const { innerWidth, innerHeight } = window;  // eslint-disable-line
+const { innerWidth, innerHeight } = window;
 
 class App extends React.Component {
   constructor() {

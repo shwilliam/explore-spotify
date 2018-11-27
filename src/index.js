@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/styles/styles.css';
-import App from './App.jsx';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App className="App fullscreen" />, document.getElementById('root'));
