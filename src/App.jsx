@@ -14,10 +14,15 @@ class App extends React.Component {
     this.state = {
       searchResults: null,
     };
+    this.resetView = this.resetView.bind(this);
   }
 
   componentDidMount() {
     initSpotifyAPI();
+  }
+
+  resetView() {
+    this.setState({ searchResults: null });
   }
 
   render() {
@@ -27,11 +32,14 @@ class App extends React.Component {
       !searchResults
         ? <TrackSearch onSearch={data => this.setState(data)} />
         : (
-          <NodeGraph
-            nodes={searchResults}
-            width={innerWidth}
-            height={innerHeight}
-          />
+          <div>
+            <button className="reset top-right" onClick={this.resetView} type="button">clear</button>
+            <NodeGraph
+              nodes={searchResults}
+              width={innerWidth}
+              height={innerHeight}
+            />
+          </div>
         )
     );
   }

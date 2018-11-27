@@ -11,6 +11,11 @@ body {
   left: 0;
   right: 0;
 }
+.top-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
 span.loading,
 span.error {
   color: white;
