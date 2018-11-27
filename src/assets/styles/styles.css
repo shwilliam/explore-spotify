@@ -1,0 +1,23 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.fullscreen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+span.loading,
+span.error {
+  color: white;
+}
+span.loading {
+  background-color: black;
+}
+span.error {
+  background-color: red;
+}
