@@ -99,6 +99,7 @@ class SearchForm extends React.Component {
             value={inputQuery}
             onChange={handleInput}
             placeholder="enter a song title"
+            autoFocus
           />
           {error && <span className="error top-right">:( please refresh</span>}
           {loading && <span className="loading top-right">loading</span>}
