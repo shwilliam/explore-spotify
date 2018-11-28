@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "d3-force": "^1.1.2",
+    "glamor": "^2.20.40",
+    "glamorous": "^4.13.1",
     "query-string": "^6.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",

@@ -1,8 +1,41 @@
 import React from 'react';
+import glamorous from 'glamorous';
 
 import { searchTracks } from '../assets/helpers/spotify-helpers';
+import colors from '../assets/styles/colors';
 
-class TrackSearch extends React.Component {
+const StyledInput = glamorous.input({
+  font: 'sans-serif',
+  fontSize: '24px',
+  textAlign: 'center',
+  width: '100%',
+  maxWidth: '280px',
+  border: 0,
+  padding: '12px 0',
+  lineHeight: '28px',
+  borderRadius: 0,
+  borderBottom: `2px solid ${colors.lightBlue}`,
+  background: 'none',
+  transition: 'all .15s ease',
+  ':hover': {
+    background: colors.lightGrey,
+  },
+  ':focus': {
+    background: 'none',
+    outline: 'none',
+    borderBottom: `2px solid ${colors.blue}`,
+  },
+});
+
+const FloatingForm = glamorous.form({
+  textAlign: 'center',
+  height: '80vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+class SearchForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,7 +66,7 @@ class TrackSearch extends React.Component {
         .join('+');
     }
 
-    this.setState({ inputQuery: '', loading: true }, () => {
+    this.setState({ loading: true }, () => {
       searchTracks(formatQuery(inputQuery))
         .then(res => res.json())
         .then(({ tracks }) => {
@@ -53,23 +86,26 @@ class TrackSearch extends React.Component {
     const { handleSubmit, handleInput } = this;
 
     return (
-      <form className="Track-seach" onSubmit={handleSubmit}>
+      <FloatingForm className="Track-seach" onSubmit={handleSubmit}>
+        {/* eslint-disable-next-line */}
         <label htmlFor="query-input">
-          <h2>
+          <h1 className="hidden">
+            {/* read by screen reader */}
             search for a song
-          </h2>
-          <input
+          </h1>
+          <StyledInput
             name="query-input"
             type="text"
             value={inputQuery}
             onChange={handleInput}
+            placeholder="enter a song title"
           />
-          {error && <span className="error">:( please refresh</span>}
-          {loading && <span className="loading">loading</span>}
+          {error && <span className="error top-right">:( please refresh</span>}
+          {loading && <span className="loading top-right">loading</span>}
         </label>
-      </form>
+      </FloatingForm>
     );
   }
 }
 
-export default TrackSearch;
+export default SearchForm;

@@ -1,9 +1,8 @@
 import React from 'react';
 
-import TrackSearch from './components/TrackSearch';
-import NodeGraph from './components/NodeGraph';
-
 import { initSpotifyAPI } from './assets/helpers/spotify-helpers';
+import GraphView from './components/GraphView';
+import SearchView from './components/SearchView';
 
 // TODO: make responsive
 const { innerWidth, innerHeight } = window;
@@ -30,16 +29,14 @@ class App extends React.Component {
 
     return (
       !searchResults
-        ? <TrackSearch onSearch={data => this.setState(data)} />
+        ? <SearchView onSearch={state => this.setState(state)} />
         : (
-          <div>
-            <button className="reset top-right" onClick={this.resetView} type="button">clear</button>
-            <NodeGraph
-              nodes={searchResults}
-              width={innerWidth}
-              height={innerHeight}
-            />
-          </div>
+          <GraphView
+            nodes={searchResults}
+            width={innerWidth}
+            height={innerHeight}
+            reset={this.resetView}
+          />
         )
     );
   }

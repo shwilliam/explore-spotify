@@ -85,6 +85,17 @@ class NodeGraph extends React.Component {
     return (
       <svg className="NodeGraph" width={width} height={height}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
+          <g className="links">
+            {
+              links && links.map(link => (
+                <NodeLink
+                  key={`link-${link.source.id}_${link.target.id}`}
+                  source={{ x: link.source.x, y: link.source.y }}
+                  target={{ x: link.target.x, y: link.target.y }}
+                />
+              ))
+              }
+          </g>
           <g className="nodes">
             {nodes && nodes.map(({
               id, name, popularity, x = 0, y = 0,
@@ -100,17 +111,6 @@ class NodeGraph extends React.Component {
               />
             ))
         }
-          </g>
-          <g className="links">
-            {
-              links && links.map(link => (
-                <NodeLink
-                  key={`link-${link.source.id}_${link.target.id}`}
-                  source={{ x: link.source.x, y: link.source.y }}
-                  target={{ x: link.target.x, y: link.target.y }}
-                />
-              ))
-              }
           </g>
         </g>
       </svg>
