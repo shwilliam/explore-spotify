@@ -13,7 +13,7 @@ const StyledNode = glamorous.g({
 });
 
 const Node = ({
-  id, name, popularity, x, y, onNodeClick,
+  id, name, popularity, x, y, onNodeClick, onNodeHover,
 }) => (
   <StyledNode
     className="Node"
@@ -22,6 +22,7 @@ const Node = ({
     onClick={() => onNodeClick({
       id, name, popularity, x, y,
     })}
+    onMouseEnter={() => onNodeHover(name)}
   >
     <circle
       r={popularity / 2}

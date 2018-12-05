@@ -76,7 +76,7 @@ class NodeGraph extends React.Component {
 
   render() {
     const {
-      width, height,
+      width, height, onNodeHover,
     } = this.props;
     const {
       nodes, links,
@@ -108,6 +108,7 @@ class NodeGraph extends React.Component {
                 x={x}
                 y={y}
                 onNodeClick={this.handleNodeClick}
+                onNodeHover={onNodeHover}
               />
             ))
         }
