@@ -10,18 +10,28 @@ class GraphView extends React.Component {
     this.setHoveredNode = this.setHoveredNode.bind(this);
   }
 
-  setHoveredNode(name) {
-    this.setState({ hoveredNode: name });
+  setHoveredNode(nodes, id) {
+    this.setState({ hoveredNode: nodes.find(song => song.id === id) });
   }
 
   render() {
     const {
       nodes, width, height, reset,
     } = this.props;
+    const { hoveredNode } = this.state;
 
     return (<>
       <button className="reset top-right" onClick={reset} type="button">clear</button>
-      {this.state.hoveredNode}
+      {hoveredNode
+      && (
+      <span className="top-left">
+        <h2>
+          {hoveredNode.name}
+        </h2>
+        {hoveredNode.artists && hoveredNode.artists.map((artist, index) => `${artist.name}${hoveredNode.artists.length > index + 1 ? ', ' : ''}`)}
+      </span>
+      )
+        }
       <NodeGraph
         nodes={nodes}
         width={width}

@@ -19,6 +19,11 @@ body {
   top: 0;
   right: 0;
 }
+.top-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 span.loading,
 span.error {
   color: white;
@@ -28,4 +33,7 @@ span.loading {
 }
 span.error {
   background-color: red;
+}
+circle:hover {
+  cursor: pointer;
 }

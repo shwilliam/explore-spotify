@@ -108,7 +108,7 @@ class NodeGraph extends React.Component {
                 x={x}
                 y={y}
                 onNodeClick={this.handleNodeClick}
-                onNodeHover={onNodeHover}
+                onNodeHover={() => onNodeHover(nodes, id)}
               />
             ))
         }
