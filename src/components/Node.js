@@ -13,14 +13,14 @@ const StyledNode = glamorous.g({
 });
 
 const Node = ({
-  id, name, popularity, x, y, onNodeClick, onNodeHover,
+  id, name, popularity, x, y, previewURL, onNodeClick, onNodeHover,
 }) => (
   <StyledNode
     className="Node"
     id={id}
     transform={`translate(${x}, ${y})`}
     onClick={() => onNodeClick({
-      id, name, popularity, x, y,
+      id, name, popularity, x, y, previewURL,
     })}
     onMouseEnter={onNodeHover}
   >

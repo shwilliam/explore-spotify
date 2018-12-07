@@ -30,17 +30,18 @@ class NodeGraph extends React.Component {
 
   componentWillUnmount() {
     stopForce();
+    this.preview.pause();
   }
 
   handleNodeClick({
-    id, name, popularity, x, y,
+    id, name, popularity, x, y, previewURL,
   }) {
     let { nodes, links, clickedTracks } = this.state;
 
     if (!clickedTracks) {
       clickedTracks = [id];
       nodes = [{
-        id, name, popularity, x, y,
+        id, name, popularity, x, y, previewURL,
       }];
       links = [];
     } else {
@@ -53,6 +54,16 @@ class NodeGraph extends React.Component {
     const clickedNodeIndex = nodes.filter(
       track => track.id === id,
     )[0].index || 0; // defaults to 0 upon init
+
+    if (this.preview) this.preview.pause();
+    this.preview = new Audio();
+    if (previewURL) {
+      this.preview.src = previewURL;
+      this.preview.volume = 0.4;
+      this.preview.addEventListener('canplay', () => this.preview.play());
+    } else {
+      console.error('missing preview'); // eslint-disable-line
+    }
 
     fetchRecommendations(clickedTracks.join(','))
       .then(res => res.json())
@@ -98,7 +109,7 @@ class NodeGraph extends React.Component {
           </g>
           <g className="nodes">
             {nodes && nodes.map(({
-              id, name, popularity, x = 0, y = 0,
+              id, name, popularity, x = 0, y = 0, preview_url,
             }) => (
               <Node
                 id={id}
@@ -107,6 +118,7 @@ class NodeGraph extends React.Component {
                 popularity={popularity}
                 x={x}
                 y={y}
+                previewURL={preview_url}
                 onNodeClick={this.handleNodeClick}
                 onNodeHover={() => onNodeHover(nodes, id)}
               />
