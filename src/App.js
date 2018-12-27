@@ -12,12 +12,9 @@ class App extends React.Component {
     super();
     this.state = {
       searchResults: null,
+      accessToken: initSpotifyAPI(),
     };
     this.resetView = this.resetView.bind(this);
-  }
-
-  componentDidMount() {
-    initSpotifyAPI();
   }
 
   resetView() {
@@ -25,8 +22,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { searchResults } = this.state;
-
+    const { accessToken, searchResults } = this.state;
+    if (!accessToken) {
+      return (<div className="spinner" />);
+    }
     return (
       !searchResults
         ? <SearchView onSearch={state => this.setState(state)} />
