@@ -5,6 +5,8 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-image: linear-gradient(to right, #BE73B1, #87B1E3);
+  font-family: sans-serif;
 }
 .hidden {
   position: absolute;

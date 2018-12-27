@@ -18,7 +18,7 @@ const StyledInput = glamorous.input({
   background: 'none',
   transition: 'all .15s ease',
   ':hover': {
-    background: colors.lightGrey,
+    backgroundColor: '#989ED4',
   },
   ':focus': {
     background: 'none',
