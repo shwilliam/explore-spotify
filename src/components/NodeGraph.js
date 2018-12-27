@@ -30,7 +30,7 @@ class NodeGraph extends React.Component {
 
   componentWillUnmount() {
     stopForce();
-    this.preview.pause();
+    if (this.preview) this.preview.pause();
   }
 
   handleNodeClick({
@@ -55,11 +55,13 @@ class NodeGraph extends React.Component {
       track => track.id === id,
     )[0].index || 0; // defaults to 0 upon init
 
-    if (this.preview) this.preview.pause();
-    this.preview = new Audio();
+    if (this.preview && previewURL) {
+      this.preview.pause();
+    }
     if (previewURL) {
+      this.preview = new Audio();
       this.preview.src = previewURL;
-      this.preview.volume = 0.4;
+      this.preview.volume = 0.2;
       this.preview.addEventListener('canplay', () => this.preview.play());
     } else {
       console.error('missing preview'); // eslint-disable-line
