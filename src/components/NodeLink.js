@@ -2,7 +2,7 @@ import React from 'react';
 
 const NodeLink = ({ source, target }) => (
   <line
-    className="NodeLink"
+    className="link"
     stroke="black"
     x1={source.x}
     y1={source.y}

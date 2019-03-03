@@ -13,16 +13,16 @@ class NodeGraph extends React.Component {
       nodes: props.nodes,
       links: null,
       clickedTracks: null,
+      // TODO: make responsive
+      width: window.innerWidth,
+      height: window.innerHeight,
     };
 
     this.handleNodeClick = this.handleNodeClick.bind(this);
   }
 
   componentDidMount() {
-    const {
-      width, height,
-    } = this.props;
-    const { nodes } = this.state;
+    const { nodes, width, height } = this.state;
 
     initGraph(nodes, width, height)
       .on('tick', () => this.forceUpdate());
@@ -53,7 +53,7 @@ class NodeGraph extends React.Component {
 
     const clickedNodeIndex = nodes.filter(
       track => track.id === id,
-    )[0].index || 0; // defaults to 0 upon init
+    )[0].index || 0; // 0 on init
 
     if (this.preview && previewURL) {
       this.preview.pause();
@@ -64,7 +64,7 @@ class NodeGraph extends React.Component {
       this.preview.volume = 0.2;
       this.preview.addEventListener('canplay', () => this.preview.play());
     } else {
-      console.error('missing preview'); // eslint-disable-line
+      console.log('No preview'); // eslint-disable-line
     }
 
     fetchRecommendations(clickedTracks.join(','))
@@ -89,14 +89,14 @@ class NodeGraph extends React.Component {
 
   render() {
     const {
-      width, height, onNodeHover,
+      updateNodeInfo,
     } = this.props;
     const {
-      nodes, links,
+      nodes, links, width, height,
     } = this.state;
 
     return (
-      <svg className="NodeGraph" width={width} height={height}>
+      <svg width={width} height={height}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           <g className="links">
             {
@@ -122,7 +122,7 @@ class NodeGraph extends React.Component {
                 y={y}
                 previewURL={preview_url}
                 onNodeClick={this.handleNodeClick}
-                onNodeHover={() => onNodeHover(nodes, id)}
+                onNodeHover={() => updateNodeInfo(nodes, id)}
               />
             ))
         }

@@ -1,39 +1,6 @@
 import React from 'react';
-import glamorous from 'glamorous';
 
 import { searchTracks } from '../assets/helpers/spotify-helpers';
-import colors from '../assets/styles/colors';
-
-const StyledInput = glamorous.input({
-  font: 'sans-serif',
-  fontSize: '24px',
-  textAlign: 'center',
-  width: '100%',
-  maxWidth: '280px',
-  border: 0,
-  padding: '12px 0',
-  lineHeight: '28px',
-  borderRadius: 0,
-  borderBottom: `2px solid ${colors.lightBlue}`,
-  background: 'none',
-  transition: 'all .15s ease',
-  ':hover': {
-    backgroundColor: '#989ED4',
-  },
-  ':focus': {
-    background: 'none',
-    outline: 'none',
-    borderBottom: `2px solid ${colors.blue}`,
-  },
-});
-
-const FloatingForm = glamorous.form({
-  textAlign: 'center',
-  height: '80vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -86,25 +53,24 @@ class SearchForm extends React.Component {
     const { handleSubmit, handleInput } = this;
 
     return (
-      <FloatingForm className="Track-seach" onSubmit={handleSubmit}>
+      <form className="Track-seach" onSubmit={handleSubmit}>
         {/* eslint-disable-next-line */}
         <label htmlFor="query-input">
-          <h1 className="hidden">
-            {/* read by screen reader */}
-            search for a song
-          </h1>
-          <StyledInput
+          <span className="sr-only">
+            Search for a song
+          </span>
+          <input
             name="query-input"
             type="text"
             value={inputQuery}
             onChange={handleInput}
-            placeholder="enter a song title"
+            placeholder="Search"
             autoFocus
           />
-          {error && <span className="error top-right">:( please refresh</span>}
-          {loading && <span className="loading top-right">loading</span>}
+          {error && <span>Something went wrong. Please refresh the page.</span>}
+          {loading && <span>Loading...</span>}
         </label>
-      </FloatingForm>
+      </form>
     );
   }
 }

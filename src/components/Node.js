@@ -1,22 +1,10 @@
 import React from 'react';
-import glamorous from 'glamorous';
-
-const StyledNode = glamorous.g({
-  '& > text': {
-    opacity: 0,
-  },
-  ':hover': {
-    '& > text': {
-      opacity: 1,
-    },
-  },
-});
 
 const Node = ({
   id, name, popularity, x, y, previewURL, onNodeClick, onNodeHover,
 }) => (
-  <StyledNode
-    className="Node"
+  <g
+    className="node"
     id={id}
     transform={`translate(${x}, ${y})`}
     onClick={() => onNodeClick({
@@ -25,19 +13,19 @@ const Node = ({
     onMouseEnter={onNodeHover}
   >
     <circle
-      r={popularity / 2}
+      r={popularity / 2.5 + 10}
       fill="black"
     />
     <circle
-      r={popularity / 8}
+      r={popularity / 5 + 3}
       // hacky red-ish to green-ish color scale
       fill={`hsl(${130 * (popularity / 100)}, 100%, 50%)`}
     />
     <circle
-      r="1"
-      fill="black"
+      r="1.5"
+      fill="white"
     />
-  </StyledNode>
+  </g>
 );
 
 export default Node;

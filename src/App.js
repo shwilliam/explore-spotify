@@ -2,10 +2,7 @@ import React from 'react';
 
 import { initSpotifyAPI } from './assets/helpers/spotify-helpers';
 import GraphView from './components/GraphView';
-import SearchView from './components/SearchView';
-
-// TODO: make responsive
-const { innerWidth, innerHeight } = window;
+import SearchForm from './components/SearchForm';
 
 class App extends React.Component {
   constructor() {
@@ -24,19 +21,39 @@ class App extends React.Component {
   render() {
     const { accessToken, searchResults } = this.state;
     if (!accessToken) {
-      return (<div className="spinner" />);
+      // TODO: spinner
+      return (<div>loading...</div>);
     }
     return (
-      !searchResults
-        ? <SearchView onSearch={state => this.setState(state)} />
-        : (
-          <GraphView
-            nodes={searchResults}
-            width={innerWidth}
-            height={innerHeight}
-            reset={this.resetView}
-          />
-        )
+      <main role="main">
+        <header>
+          <h1>explore spotify</h1>
+          {
+            searchResults && (
+              <button
+                className="pin-top-right"
+                onClick={this.resetView}
+                type="button"
+              >
+                reset
+              </button>
+            )
+          }
+        </header>
+        {
+          !searchResults
+            ? (
+              <SearchForm
+                onSearch={state => this.setState(state)}
+              />
+            )
+            : (
+              <GraphView
+                nodes={searchResults}
+              />
+            )
+          }
+      </main>
     );
   }
 }
