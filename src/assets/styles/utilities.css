@@ -4,8 +4,10 @@
   left: -9999px;
   top: -9999px;
 }
-.float-right {
-  float: right;
+.pin-top-right {
+  position: fixed;
+  top: 0;
+  right: 0;
 }
 .pin-top {
   position: fixed;
@@ -13,6 +15,22 @@
   left: 0;
   right: 0;
 }
+.bold {
+  font-weight: 600;
+}
 .pink {
   color: var(--pink);
+}
+.border-left {
+  border-left: 1px solid var(--blue);
+}
+.draggable {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+.draggable:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
 }

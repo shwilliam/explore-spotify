@@ -38,9 +38,7 @@ class SearchForm extends React.Component {
       .then(data => (
         data.tracks
           ? onSearch({ searchResults: data.tracks.items })
-          : {
-          // TODO: handle expired token
-          }
+          : alert('Token expired. Please refresh the page.')
       ))
       .catch((error) => {
         console.error(error); // eslint-disable-line

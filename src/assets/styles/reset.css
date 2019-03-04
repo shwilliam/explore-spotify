@@ -45,3 +45,7 @@ button,
 	cursor: pointer;
   -webkit-appearance: button;
 }
+a {
+	color: inherit;
+	text-decoration: inherit;
+}

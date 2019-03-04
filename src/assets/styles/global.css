@@ -18,14 +18,9 @@ header {
   z-index: 2;
   padding: 1rem;
   border-bottom: 1px solid var(--blue);
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-between;
-}
-header :last-child {
-  border-left: 1px solid var(--blue);
 }
 h1 {
+  font-weight: 600;
   font-variant: small-caps;
   padding: 1rem;
   margin: -1rem 0 -1rem -1rem;
@@ -47,8 +42,15 @@ input {
 }
 button {
   padding: 1rem;
-  margin: -1rem -1rem -1rem 0;
   background-color: var(--white);
+}
+nav {
+  z-index: -1;
+  padding: 1rem;  
+}
+li {
+  display: inline-block;
+  padding: 0 1rem;
 }
 ::placeholder {
   opacity: 1;
@@ -61,6 +63,7 @@ input:focus {
   width: 140px;
 }
 marquee {
+  z-index: 1;
   padding: 1rem 0;
   background-color: var(--white);
 }
@@ -68,6 +71,7 @@ circle:hover {
   cursor: pointer;
 }
 #track-info {
+  z-index: 1;
   position: fixed;
   top: 4rem;
   left: 1rem;

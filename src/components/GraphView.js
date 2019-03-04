@@ -1,5 +1,17 @@
 import React from 'react';
+import posed from 'react-pose';
+
 import NodeGraph from './NodeGraph';
+
+const DraggableDiv = posed.div({
+  draggable: true,
+  dragBounds: {
+    top: '-20%',
+    right: '50%',
+    bottom: '20%',
+    left: '-50%',
+  },
+})
 
 class GraphView extends React.Component {
   constructor(props) {
@@ -45,20 +57,24 @@ class GraphView extends React.Component {
       tempNodeInfo
       && (
         <section id="track-info">
-          <div>{tempNodeInfo.name}</div>
+          <div className="bold">
+            {tempNodeInfo.name}
+          </div>
           <div>
             {tempNodeInfo.artists && tempNodeInfo.artists.map((artist, index) => `${artist.name}${tempNodeInfo.artists.length > index + 1 ? ', ' : ''}`)}
           </div>
         </section>
       )
     }
-      {nodes.length && (
-        <NodeGraph
-          nodes={nodes}
-          updateTempNode={this.setTempNodeInfo}
-          updatePlayingNode={this.setPlayingNodeInfo}
-        />
-      )}
+      {nodes.length ? (
+        <DraggableDiv className="draggable">
+          <NodeGraph
+            nodes={nodes}
+            updateTempNode={this.setTempNodeInfo}
+            updatePlayingNode={this.setPlayingNodeInfo}
+            />
+        </DraggableDiv>
+      ) : alert('No songs found. Please reset the search to try again.')}
     </>);
   }
 }

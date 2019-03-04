@@ -14,8 +14,8 @@ class NodeGraph extends React.Component {
       links: null,
       clickedTracks: null,
       // TODO: make responsive
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: window.innerWidth * 2,
+      height: window.innerHeight * 2,
     };
 
     this.updatePlayingNode = this.updatePlayingNode.bind(this);
@@ -82,6 +82,7 @@ class NodeGraph extends React.Component {
         updateNodesAndLinks(nodes, links, clickedTracks, state => this.setState(state));
       })
       .catch((error) => {
+        alert('Couldn\'t fetch song recommendations... Please refresh the page.');
         console.error(error); // eslint-disable-line
       });
   }
@@ -95,7 +96,7 @@ class NodeGraph extends React.Component {
     } = this.state;
 
     return (
-      <svg width={width} height={height}>
+      <svg width={width} height={height} transform={`translate(-${width / 4}, -${height / 4})`}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           <g className="links">
             {
