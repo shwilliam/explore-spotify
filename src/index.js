@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import './assets/styles/reset.css';
+import './assets/styles/utilities.css';
 import './assets/styles/global.css';
 
 ReactDOM.render(<App id="App" />, document.getElementById('root'));

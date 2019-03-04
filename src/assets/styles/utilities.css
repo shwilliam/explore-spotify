@@ -1,0 +1,18 @@
+.sr-only {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  left: -9999px;
+  top: -9999px;
+}
+.float-right {
+  float: right;
+}
+.pin-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.pink {
+  color: var(--pink);
+}

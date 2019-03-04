@@ -22,16 +22,20 @@ class App extends React.Component {
     const { accessToken, searchResults } = this.state;
     if (!accessToken) {
       // TODO: spinner
-      return (<div>loading...</div>);
+      return (
+        <div>
+          Redirecting to Spotify login...
+        </div>
+      );
     }
     return (
       <main role="main">
-        <header>
+        <header className="pin-top">
           <h1>explore spotify</h1>
           {
             searchResults && (
               <button
-                className="pin-top-right"
+                className="float-right pink"
                 onClick={this.resetView}
                 type="button"
               >

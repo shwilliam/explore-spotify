@@ -1,29 +1,30 @@
 import React from 'react';
 
 const Node = ({
-  id, name, popularity, x, y, previewURL, onNodeClick, onNodeHover,
+  id, name, popularity, x, y, previewURL, updatePlayingNode, updateTempNode,
 }) => (
   <g
     className="node"
     id={id}
     transform={`translate(${x}, ${y})`}
-    onClick={() => onNodeClick({
+    onDoubleClick={() => updatePlayingNode({
       id, name, popularity, x, y, previewURL,
     })}
-    onMouseEnter={onNodeHover}
+    onClick={updateTempNode}
+    onMouseEnter={updateTempNode}
   >
     <circle
       r={popularity / 2.5 + 10}
-      fill="black"
+      fill="var(--blue)"
     />
     <circle
-      r={popularity / 5 + 3}
+      r={popularity / 6 + 4}
       // hacky red-ish to green-ish color scale
-      fill={`hsl(${130 * (popularity / 100)}, 100%, 50%)`}
+      fill={`hsl(${130 * (popularity / 100)}, 100%, 60%)`}
     />
     <circle
-      r="1.5"
-      fill="white"
+      r="2"
+      fill="var(--white)"
     />
   </g>
 );

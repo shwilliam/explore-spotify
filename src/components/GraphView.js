@@ -5,39 +5,60 @@ class GraphView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hoveredNode: null,
+      tempNodeInfo: null,
+      playingNodeInfo: null,
     };
-    this.setNodeInfo = this.setNodeInfo.bind(this);
+    this.setTempNodeInfo = this.setTempNodeInfo.bind(this);
+    this.setPlayingNodeInfo = this.setPlayingNodeInfo.bind(this);
   }
 
-  setNodeInfo(nodes, id) {
-    this.setState({ hoveredNode: nodes.find(song => song.id === id) });
+  setTempNodeInfo(nodes, id) {
+    this.setState({ tempNodeInfo: nodes.find(song => song.id === id) });
+  }
+
+  setPlayingNodeInfo(nodes, id) {
+    this.setState({ playingNodeInfo: nodes.find(song => song.id === id) });
   }
 
   render() {
     const { nodes } = this.props;
-    const { hoveredNode } = this.state;
-
+    const { tempNodeInfo, playingNodeInfo } = this.state;
+    
     return (<>
-      {hoveredNode
+      {/* TODO: set aria-live
+      eslint-disable-next-line */}
+      <marquee className="pin-top">
+        {
+          playingNodeInfo ? (
+            <>
+              <span className="pink">
+                ♫
+              </span>
+              {playingNodeInfo.name}
+              {playingNodeInfo.artists && ' - '}
+              {playingNodeInfo.artists && playingNodeInfo.artists.map((artist, index) => `${artist.name}${playingNodeInfo.artists.length > index + 1 ? ', ' : ''}`)}
+            </>
+          ) : <p>Hover/tap to explore songs. Double-click to get recommendations and play track.</p>
+        }
+      </marquee>
+      {
+      tempNodeInfo
       && (
-        // TODO: set aria-live
-        <section className="pin-top-left">
-          <div>{hoveredNode.name}</div>
-          <div>{hoveredNode.artists && hoveredNode.artists.map((artist, index) => `${artist.name}${hoveredNode.artists.length > index + 1 ? ', ' : ''}`)}</div>
+        <section id="track-info">
+          <div>{tempNodeInfo.name}</div>
+          <div>
+            {tempNodeInfo.artists && tempNodeInfo.artists.map((artist, index) => `${artist.name}${tempNodeInfo.artists.length > index + 1 ? ', ' : ''}`)}
+          </div>
         </section>
       )
     }
-      {nodes.length ? (
+      {nodes.length && (
         <NodeGraph
           nodes={nodes}
-          updateNodeInfo={this.setNodeInfo}
+          updateTempNode={this.setTempNodeInfo}
+          updatePlayingNode={this.setPlayingNodeInfo}
         />
-      ) : (
-        <div>
-          no songs found :(
-        </div>)
-      }
+      )}
     </>);
   }
 }

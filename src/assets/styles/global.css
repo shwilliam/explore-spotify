@@ -12,31 +12,66 @@ body {
   background-color: var(--white);
   font-family: sans-serif;
   font-size: 15px;
-  color: var(--black);
+  color: var(--blue);
 }
-.sr-only {
-  position: absolute;
-  clip: rect(1px, 1px, 1px, 1px);
-  left: -9999px;
-  top: -9999px;
+header {
+  z-index: 2;
+  padding: 1rem;
+  border-bottom: 1px solid var(--blue);
+  display: -webkit-flex;
+  display: flex;
+  justify-content: space-between;
 }
-.pin-top-right {
-  position: fixed;
-  top: 0;
-  right: 0;
-}
-.pin-top-left {
-  position: fixed;
-  top: 0;
-  left: 0;
+header :last-child {
+  border-left: 1px solid var(--blue);
 }
 h1 {
-  position: fixed;
-  left: 0;
-  right: 0;
-  text-align: center;
-  pointer-events: none;
+  font-variant: small-caps;
+  padding: 1rem;
+  margin: -1rem 0 -1rem -1rem;
+  background-color: var(--blue);
+  color: var(--white);
+  display: inline-block;
+}
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+input {
+  font-size: 1.6rem;
+  width: 0px;
+  transition: width 0.4s ease;
+}
+button {
+  padding: 1rem;
+  margin: -1rem -1rem -1rem 0;
+  background-color: var(--white);
+}
+::placeholder {
+  opacity: 1;
+}
+button svg {
+  margin-bottom: -5px;
+}
+form:hover input,
+input:focus {
+  width: 140px;
+}
+marquee {
+  padding: 1rem 0;
+  background-color: var(--white);
 }
 circle:hover {
   cursor: pointer;
+}
+#track-info {
+  position: fixed;
+  top: 4rem;
+  left: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--blue);
+  background-color: var(--white);
 }

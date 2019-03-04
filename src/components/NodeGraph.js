@@ -18,7 +18,7 @@ class NodeGraph extends React.Component {
       height: window.innerHeight,
     };
 
-    this.handleNodeClick = this.handleNodeClick.bind(this);
+    this.updatePlayingNode = this.updatePlayingNode.bind(this);
   }
 
   componentDidMount() {
@@ -33,9 +33,10 @@ class NodeGraph extends React.Component {
     if (this.preview) this.preview.pause();
   }
 
-  handleNodeClick({
+  updatePlayingNode({
     id, name, popularity, x, y, previewURL,
   }) {
+    const { updatePlayingNode } = this.props;
     let { nodes, links, clickedTracks } = this.state;
 
     if (!clickedTracks) {
@@ -62,9 +63,7 @@ class NodeGraph extends React.Component {
       this.preview = new Audio();
       this.preview.src = previewURL;
       this.preview.volume = 0.2;
-      this.preview.addEventListener('canplay', () => this.preview.play());
-    } else {
-      console.log('No preview'); // eslint-disable-line
+      this.preview.addEventListener('canplay', () => this.preview.play() && updatePlayingNode(nodes, id));
     }
 
     fetchRecommendations(clickedTracks.join(','))
@@ -89,7 +88,7 @@ class NodeGraph extends React.Component {
 
   render() {
     const {
-      updateNodeInfo,
+      updateTempNode,
     } = this.props;
     const {
       nodes, links, width, height,
@@ -121,8 +120,8 @@ class NodeGraph extends React.Component {
                 x={x}
                 y={y}
                 previewURL={preview_url}
-                onNodeClick={this.handleNodeClick}
-                onNodeHover={() => updateNodeInfo(nodes, id)}
+                updatePlayingNode={this.updatePlayingNode}
+                updateTempNode={() => updateTempNode(nodes, id)}
               />
             ))
         }

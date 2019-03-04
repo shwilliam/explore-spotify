@@ -8,8 +8,6 @@ class SearchForm extends React.Component {
 
     this.state = {
       inputQuery: '',
-      error: null,
-      loading: false,
     };
 
     this.handleInput = this.handleInput.bind(this);
@@ -26,6 +24,8 @@ class SearchForm extends React.Component {
     const { onSearch } = this.props;
     const { inputQuery } = this.state;
 
+    if (!inputQuery || !inputQuery.trim().length) return;
+
     function formatQuery(query) {
       return query.split(' ')
         .map(word => word.trim())
@@ -33,42 +33,43 @@ class SearchForm extends React.Component {
         .join('+');
     }
 
-    this.setState({ loading: true }, () => {
-      searchTracks(formatQuery(inputQuery))
-        .then(res => res.json())
-        .then(({ tracks }) => {
-          this.setState({ loading: false }, () => {
-            onSearch({ searchResults: tracks.items });
-          });
-        })
-        .catch((error) => {
-          this.setState({ error });
-          console.error(error);  // eslint-disable-line
-        });
-    });
+    searchTracks(formatQuery(inputQuery))
+      .then(res => res.json())
+      .then(data => (
+        data.tracks
+          ? onSearch({ searchResults: data.tracks.items })
+          : {
+          // TODO: handle expired token
+          }
+      ))
+      .catch((error) => {
+        console.error(error); // eslint-disable-line
+      });
   }
 
   render() {
-    const { inputQuery, error, loading } = this.state;
+    const { inputQuery } = this.state;
     const { handleSubmit, handleInput } = this;
 
     return (
       <form className="Track-seach" onSubmit={handleSubmit}>
-        {/* eslint-disable-next-line */}
         <label htmlFor="query-input">
           <span className="sr-only">
             Search for a song
           </span>
           <input
             name="query-input"
-            type="text"
+            type="search"
             value={inputQuery}
             onChange={handleInput}
             placeholder="Search"
-            autoFocus
           />
-          {error && <span>Something went wrong. Please refresh the page.</span>}
-          {loading && <span>Loading...</span>}
+          <button aria-label="Search" title="Search" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="butt" strokeLinejoin="arcs">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
         </label>
       </form>
     );
