@@ -10,6 +10,7 @@ import DraggableGraphContainer from './components/DraggableGraphContainer'
 import NodeGraph from './components/NodeGraph'
 import HoverInfo from './components/HoverInfo'
 import PlayingInfo from './components/PlayingInfo'
+import VolumeSlider from './components/VolumeSlider'
 
 const accessToken = initSpotifyAPI()
 
@@ -20,7 +21,9 @@ const App = withTrackContext(({ trackContext }) => {
     hoveredTrack,
     setHoveredTrack,
     playingTrack,
-    setPlayingTrack
+    setPlayingTrack,
+    playingVolume,
+    setPlayingVolume
   } = trackContext
 
   if (!accessToken) return (<div>Redirecting to Spotify login...</div>)
@@ -58,6 +61,7 @@ const App = withTrackContext(({ trackContext }) => {
           updatePlayingNode={setPlayingTrack}
         />
       </DraggableGraphContainer>
+      {playingTrack && <VolumeSlider volume={playingVolume} onChange={setPlayingVolume} />}
     </main>
   )
 })

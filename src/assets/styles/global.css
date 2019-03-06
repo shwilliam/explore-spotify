@@ -56,14 +56,14 @@ form {
   transform: translate(-50%, -50%);
   white-space: nowrap;
 }
-input {
+input[type=search] {
   font-size: 1.4rem;
   letter-spacing: 0.03rem;
   width: 0px;
   transition: width 0.4s ease;
 }
-form:hover input,
-input:focus {
+form:hover input[type=search],
+input[type=search]:focus {
   width: 140px;
 }
 ::placeholder {
@@ -93,6 +93,39 @@ marquee {
   z-index: 1;
   padding: 1rem 0;
   background-color: var(--white);
+}
+
+/* volume slider */
+#volume-slider {
+  width: max-content;
+  z-index: 1;
+  position: fixed;
+  top: 4rem;
+  right: 1rem;
+  padding: 3rem 0.9rem 1rem 0.9rem;
+  border: 1px solid var(--pink);
+  background-color: var(--white);
+}
+#volume-slider .label {
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+input[type=range][orient=vertical] {
+  display: block;
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+  background-color: var(--pink);
+}
+input[type="range"]:focus {
+  border-color: var(--blue);
+}
+input[type="range"]:focus::-webkit-slider-thumb,
+input[type="range"]:focus::-moz-range-thumb,
+input[type="range"]:focus::-ms-thumb {
+  outline: 2px var(--blue) thin dotted;
 }
 
 /* hover info */

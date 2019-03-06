@@ -6,7 +6,8 @@ export class TrackContextProvider extends React.Component {
   state = {
     searchResults: null,
     hoveredTrack: null,
-    playingTrack: null
+    playingTrack: null,
+    playingVolume: 20
   }
 
   setSearchResults = (searchResults) => {
@@ -25,9 +26,13 @@ export class TrackContextProvider extends React.Component {
     this.setState({ playingTrack: { id, name, artists, popularity, previewURL } })
   }
 
+  setPlayingVolume = (volume) => {
+    this.setState({ playingVolume: volume })
+  }
+
   render () {
     const { children } = this.props
-    const { searchResults, hoveredTrack, playingTrack } = this.state
+    const { searchResults, hoveredTrack, playingTrack, playingVolume } = this.state
 
     return (
       <TrackContext.Provider
@@ -37,8 +42,10 @@ export class TrackContextProvider extends React.Component {
           resetTracks: this.resetTracks,
           hoveredTrack,
           playingTrack,
+          playingVolume,
           setHoveredTrack: this.setHoveredTrack,
-          setPlayingTrack: this.setPlayingTrack
+          setPlayingTrack: this.setPlayingTrack,
+          setPlayingVolume: this.setPlayingVolume
         }}
       >
         {children}
