@@ -1,15 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import * as serviceWorker from './serviceWorker';
-import App from './App';
-import './assets/styles/reset.css';
-import './assets/styles/utilities.css';
-import './assets/styles/global.css';
+import './assets/styles/reset.css'
+import './assets/styles/utilities.css'
+import './assets/styles/global.css'
 
-ReactDOM.render(<App id="App" />, document.getElementById('root'));
+import App from './App'
+import * as serviceWorker from './serviceWorker'
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import { TrackContextProvider } from './context/search'
+
+ReactDOM.render((
+  <TrackContextProvider>
+    <App />
+  </TrackContextProvider>
+), document.getElementById('root'))
+
+// TODO: register() [http://bit.ly/CRA-PWA]
+serviceWorker.unregister()

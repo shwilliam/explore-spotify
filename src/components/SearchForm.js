@@ -1,56 +1,63 @@
-import React from 'react';
+import React from 'react'
+import { searchTracks } from '../assets/utils/spotify'
 
-import { searchTracks } from '../assets/helpers/spotify-helpers';
+import { withTrackContext } from '../context/search'
 
 class SearchForm extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      inputQuery: '',
-    };
-
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  state = {
+    inputQuery: '',
+    loading: false
   }
 
-  handleInput(event) {
-    this.setState({ inputQuery: event.target.value });
+  handleInput = (event) => {
+    const { loading } = this.state
+    if (loading) return
+
+    this.setState({ inputQuery: event.target.value })
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit = (event) => {
+    const { trackContext } = this.props
+    const { inputQuery, loading } = this.state
 
-    const { onSearch } = this.props;
-    const { inputQuery } = this.state;
+    event.preventDefault()
 
-    if (!inputQuery || !inputQuery.trim().length) return;
+    if (loading) return
 
-    function formatQuery(query) {
+    this.setState({ loading: true })
+
+    if (!inputQuery || !inputQuery.trim().length) return
+
+    function formatQuery (query) {
       return query.split(' ')
         .map(word => word.trim())
         .filter(word => Boolean(word.length))
-        .join('+');
+        .join('+')
     }
 
     searchTracks(formatQuery(inputQuery))
       .then(res => res.json())
-      .then(data => (
-        data.tracks
-          ? onSearch({ searchResults: data.tracks.items })
-          : alert('Token expired. Please refresh the page.')
-      ))
+      .then((data) => {
+        this.setState({ loading: false })
+        if (!data.tracks) {
+          alert('Token expired. Please refresh the page.') // eslint-disable-line
+        } else if (!data.tracks.items.length) {
+          alert('No songs matched your search. Please try again.'); // eslint-disable-line
+        } else {
+          trackContext.updateSearchResults(data.tracks.items)
+        }
+      })
       .catch((error) => {
         console.error(error); // eslint-disable-line
-      });
+      })
   }
 
-  render() {
-    const { inputQuery } = this.state;
-    const { handleSubmit, handleInput } = this;
+  render () {
+    const { inputQuery, loading } = this.state
+    const { handleSubmit, handleInput } = this
 
     return (
-      <form className="Track-seach" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={loading ? 'loading' : ''}>
         <label htmlFor="query-input">
           <span className="sr-only">
             Search for a song
@@ -70,8 +77,8 @@ class SearchForm extends React.Component {
           </button>
         </label>
       </form>
-    );
+    )
   }
 }
 
-export default SearchForm;
+export default withTrackContext(SearchForm)

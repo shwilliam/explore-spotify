@@ -1,9 +1,12 @@
+/* variables */
 :root {
   --white: #fbfbfb;
   --black: #222;
   --pink: #ff003f;
   --blue: #0084ff;
 }
+
+/* global */
 html,
 body {
   width: 100vw;
@@ -14,20 +17,38 @@ body {
   font-size: 15px;
   color: var(--blue);
 }
+button {
+  padding: 1rem;
+  background-color: var(--white);
+}
+li {
+  display: inline-block;
+}
+
+/* navigation */
+nav {
+  z-index: -1;
+  padding: 1rem 0; 
+}
+nav li > * {
+  padding-right: 1rem;
+}
+
+/* top header */
 header {
   z-index: 2;
-  padding: 1rem;
   border-bottom: 1px solid var(--blue);
 }
 h1 {
+  white-space: nowrap;
   font-weight: 600;
-  font-variant: small-caps;
   padding: 1rem;
-  margin: -1rem 0 -1rem -1rem;
   background-color: var(--blue);
   color: var(--white);
   display: inline-block;
 }
+
+/* search form */
 form {
   position: absolute;
   top: 50%;
@@ -36,21 +57,14 @@ form {
   white-space: nowrap;
 }
 input {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  letter-spacing: 0.03rem;
   width: 0px;
   transition: width 0.4s ease;
 }
-button {
-  padding: 1rem;
-  background-color: var(--white);
-}
-nav {
-  z-index: -1;
-  padding: 1rem;  
-}
-li {
-  display: inline-block;
-  padding: 0 1rem;
+form:hover input,
+input:focus {
+  width: 140px;
 }
 ::placeholder {
   opacity: 1;
@@ -58,24 +72,59 @@ li {
 button svg {
   margin-bottom: -5px;
 }
-form:hover input,
-input:focus {
-  width: 140px;
+form.loading svg {
+  transition: all 0.4s ease;
+  animation: blink 1.3s infinite ease-in-out;
 }
+@keyframes blink {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+/* playing info */
 marquee {
   z-index: 1;
   padding: 1rem 0;
   background-color: var(--white);
 }
-circle:hover {
-  cursor: pointer;
-}
-#track-info {
+
+/* hover info */
+#hover-info {
   z-index: 1;
   position: fixed;
   top: 4rem;
   left: 1rem;
   padding: 1rem;
-  border: 1px solid var(--blue);
+  border: 1px solid var(--pink);
   background-color: var(--white);
+}
+
+/* node */
+.node > * {
+  animation: spin 15s infinite linear;
+}
+@keyframes spin {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(539deg);
+  }
+}
+.node text {
+  font-size: 0.9rem;
+  transition: all 0.4s ease;
+}
+.node circle {
+  cursor: pointer;
+}
+.node:hover text {
+  font-size: 1.1rem;
 }

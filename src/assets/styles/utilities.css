@@ -4,11 +4,6 @@
   left: -9999px;
   top: -9999px;
 }
-.pin-top-right {
-  position: fixed;
-  top: 0;
-  right: 0;
-}
 .pin-top {
   position: fixed;
   top: 0;
@@ -33,4 +28,10 @@
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
   cursor: grabbing;
+}
+.space-between {
+  display: -webkit-flex;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

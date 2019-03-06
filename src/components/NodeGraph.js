@@ -1,69 +1,72 @@
-import React from 'react';
+import React from 'react'
+import { fetchRecommendations } from '../assets/utils/spotify'
+import { initGraph, updateNodesAndLinks, stopForce } from '../assets/utils/d3'
 
-import { fetchRecommendations } from '../assets/helpers/spotify-helpers';
-import { initGraph, updateNodesAndLinks, stopForce } from '../assets/helpers/d3-helpers';
-
-import Node from './Node';
-import NodeLink from './NodeLink';
+import Node from './Node'
+import NodeLink from './NodeLink'
 
 class NodeGraph extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nodes: props.nodes,
-      links: null,
-      clickedTracks: null,
-      // TODO: make responsive
-      width: window.innerWidth * 2,
-      height: window.innerHeight * 2,
-    };
-
-    this.updatePlayingNode = this.updatePlayingNode.bind(this);
+  state = {
+    nodes: this.props.searchResults,
+    links: null,
+    clickedTracks: null,
+    // TODO: make responsive
+    width: window.innerWidth * 2,
+    height: window.innerHeight * 2
   }
 
-  componentDidMount() {
-    const { nodes, width, height } = this.state;
+  componentDidMount () {
+    const { nodes, width, height } = this.state
+    this._mounted = true
 
     initGraph(nodes, width, height)
-      .on('tick', () => this.forceUpdate());
+      .on('tick', () => this.forceUpdate())
   }
 
-  componentWillUnmount() {
-    stopForce();
-    if (this.preview) this.preview.pause();
+  componentWillUnmount () {
+    this._mounted = false
+
+    stopForce()
+    if (this.preview) this.preview.pause() && this.preview.removeEventListener('canplay', this.playPreview)
   }
 
-  updatePlayingNode({
-    id, name, popularity, x, y, previewURL,
-  }) {
-    const { updatePlayingNode } = this.props;
-    let { nodes, links, clickedTracks } = this.state;
+  updatePlayingNode = (
+    { id, name, artists, popularity, previewURL }, { x, y }
+  ) => {
+    const { updatePlayingNode } = this.props
+    let { nodes, links, clickedTracks } = this.state
 
     if (!clickedTracks) {
-      clickedTracks = [id];
+      clickedTracks = [id]
       nodes = [{
-        id, name, popularity, x, y, previewURL,
-      }];
-      links = [];
+        id, name, artists, popularity, x, y, previewURL
+      }]
+      links = []
     } else {
       if (clickedTracks.length === 5) {
-        clickedTracks = clickedTracks.slice(1, 5);
+        clickedTracks = clickedTracks.slice(1, 5)
       }
-      clickedTracks.push(id);
+      clickedTracks.push(id)
     }
 
     const clickedNodeIndex = nodes.filter(
-      track => track.id === id,
-    )[0].index || 0; // 0 on init
+      track => track.id === id
+    )[0].index || 0
 
     if (this.preview && previewURL) {
-      this.preview.pause();
+      this.preview.pause()
+      this.preview.removeEventListener('canplay', this.playPreview)
     }
     if (previewURL) {
-      this.preview = new Audio();
-      this.preview.src = previewURL;
-      this.preview.volume = 0.2;
-      this.preview.addEventListener('canplay', () => this.preview.play() && updatePlayingNode(nodes, id));
+      this.preview = new Audio()
+      this.preview.src = previewURL
+      this.preview.volume = 0.2
+      this.playPreview = () => {
+        if (!this._mounted) return
+        this.preview.play()
+        updatePlayingNode(id, name, artists, popularity, previewURL)
+      }
+      this.preview.addEventListener('canplay', this.playPreview)
     }
 
     fetchRecommendations(clickedTracks.join(','))
@@ -71,29 +74,30 @@ class NodeGraph extends React.Component {
       .then(({ tracks }) => {
         tracks.map((track) => {
           if (nodes.findIndex(node => node.id === track.id) === -1) {
-            nodes.push(track);
+            nodes.push(track)
             links.push({
               source: clickedNodeIndex,
-              target: nodes.indexOf(track),
-            });
+              target: nodes.indexOf(track)
+            })
           }
-          return { tracks, links };
-        });
-        updateNodesAndLinks(nodes, links, clickedTracks, state => this.setState(state));
+          return { tracks, links }
+        })
+
+        if (this._mounted) updateNodesAndLinks(nodes, links, clickedTracks, state => this.setState(state))
       })
       .catch((error) => {
-        alert('Couldn\'t fetch song recommendations... Please refresh the page.');
+        alert('Couldn\'t fetch song recommendations... Please refresh the page.'); // eslint-disable-line
         console.error(error); // eslint-disable-line
-      });
+      })
   }
 
-  render() {
+  render () {
     const {
-      updateTempNode,
-    } = this.props;
+      updateTempNode
+    } = this.props
     const {
-      nodes, links, width, height,
-    } = this.state;
+      nodes, links, width, height
+    } = this.state
 
     return (
       <svg width={width} height={height} transform={`translate(-${width / 4}, -${height / 4})`}>
@@ -107,30 +111,32 @@ class NodeGraph extends React.Component {
                   target={{ x: link.target.x, y: link.target.y }}
                 />
               ))
-              }
+            }
           </g>
           <g className="nodes">
             {nodes && nodes.map(({
-              id, name, popularity, x = 0, y = 0, preview_url,
+              id, name, artists, popularity, preview_url: previewURL, x = 0, y = 0
             }) => (
               <Node
                 id={id}
+                radius={popularity / 2.5 + 17}
+                // hacky green-ish to red-ish color scale
+                color={`hsl(${130 * (popularity / 100)}, 100%, 60%)`}
                 key={`node-${id}`}
-                name={name}
-                popularity={popularity}
                 x={x}
                 y={y}
-                previewURL={preview_url}
-                updatePlayingNode={this.updatePlayingNode}
-                updateTempNode={() => updateTempNode(nodes, id)}
-              />
+                onClick={() => this.updatePlayingNode({ id, name, artists, popularity, previewURL }, { x, y })}
+                onMouseEnter={() => updateTempNode(id, name, artists, popularity, previewURL)}
+              >
+                {name}
+              </Node>
             ))
-        }
+            }
           </g>
         </g>
       </svg>
-    );
+    )
   }
 }
 
-export default NodeGraph;
+export default NodeGraph

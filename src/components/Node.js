@@ -1,32 +1,31 @@
-import React from 'react';
+import React from 'react'
 
 const Node = ({
-  id, name, popularity, x, y, previewURL, updatePlayingNode, updateTempNode,
+  id, radius, color, x, y, children, ...props
 }) => (
   <g
-    className="node"
-    id={id}
+    {...props}
     transform={`translate(${x}, ${y})`}
-    onDoubleClick={() => updatePlayingNode({
-      id, name, popularity, x, y, previewURL,
-    })}
-    onClick={updateTempNode}
-    onMouseEnter={updateTempNode}
   >
     <circle
-      r={popularity / 2.5 + 10}
+      r={radius}
       fill="var(--blue)"
+      id={`node-${id}`}
     />
+    <text fill="var(--pink)">
+      <textPath alignmentBaseline="top" xlinkHref={`#node-${id}`}>
+        {children}
+      </textPath>
+    </text>
     <circle
-      r={popularity / 6 + 4}
-      // hacky red-ish to green-ish color scale
-      fill={`hsl(${130 * (popularity / 100)}, 100%, 60%)`}
+      r={radius / 2.5}
+      fill={color}
     />
     <circle
       r="2"
       fill="var(--white)"
     />
   </g>
-);
+)
 
-export default Node;
+export default Node
