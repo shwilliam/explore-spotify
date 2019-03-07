@@ -1,16 +1,12 @@
-import queryString from 'query-string'
-
 let accessToken = null
 
-function redirectToLogin () {
-  window.location.href = 'https://explore-spotify-login.herokuapp.com/login'
+export function updateAccessToken (token) {
+  accessToken = token
+  return token
 }
 
-export function initSpotifyAPI () {
-  if (!accessToken) {
-    accessToken = queryString.parse(window.location.search).access_token || redirectToLogin()
-  }
-  return accessToken
+export function redirectToLogin () {
+  window.location.href = 'https://explore-spotify-login.herokuapp.com/login'
 }
 
 export function searchTracks (query) {
@@ -27,4 +23,4 @@ export function fetchRecommendations (seed) {
   )
 }
 
-export default { initSpotifyAPI, searchTracks, fetchRecommendations }
+export default { updateAccessToken, redirectToLogin, searchTracks, fetchRecommendations }
