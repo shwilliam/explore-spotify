@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import React from 'react'
 import { fetchRecommendations } from '../assets/utils/spotify'
 import { initGraph, updateNodesAndLinks, stopForce } from '../assets/utils/d3'

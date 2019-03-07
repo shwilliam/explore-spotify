@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import React from 'react'
 import { initSpotifyAPI } from './assets/utils/spotify'
 
@@ -13,13 +14,11 @@ class App extends React.PureComponent {
     const { searchResults } = this.props.searchContext
 
     if (!accessToken) {
-      return (<div>Redirecting to Spotify login...</div>)
+      return <div>Redirecting to Spotify login...</div>
     } else if (!searchResults) {
-      return (<SearchView/>)
+      return <SearchView/>
     }
-    return (
-      <GraphView/>
-    )
+    return <GraphView/>
   }
 }
 
