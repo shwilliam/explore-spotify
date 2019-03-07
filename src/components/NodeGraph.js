@@ -31,13 +31,15 @@ class NodeGraph extends React.PureComponent {
   componentWillUnmount () {
     const {
       playingTrackAudio,
-      pauseTrack
+      pauseTrack,
+      clearTrack
     } = this.props.audioContext
 
     this._mounted = false
     stopForce()
     if (playingTrackAudio) {
       pauseTrack()
+      clearTrack()
       playingTrackAudio.removeEventListener('canplay', this.playPreview)
     }
   }

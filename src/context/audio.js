@@ -20,6 +20,10 @@ export class AudioContextProvider extends React.Component {
     this.state.playingTrackAudio.pause()
   }
 
+  clearTrack = () => {
+    this.setState({ playingTrack: null })
+  }
+
   setPlayingTrack = (id, name, artists, popularity, previewURL) => {
     this.setState({ playingTrack: { id, name, artists, popularity, previewURL } })
   }
@@ -45,6 +49,7 @@ export class AudioContextProvider extends React.Component {
           playingTrackAudio,
           playTrack: this.playTrack,
           pauseTrack: this.pauseTrack,
+          clearTrack: this.clearTrack,
           playingVolume,
           setPlayingTrack: this.setPlayingTrack,
           setPlayingTrackAudio: this.setPlayingTrackAudio,
