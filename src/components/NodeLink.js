@@ -1,13 +1,19 @@
 import React from 'react'
 
-const NodeLink = ({ source, target }) => (
-  <line
-    stroke="var(--pink)"
-    x1={source.x}
-    y1={source.y}
-    x2={target.x}
-    y2={target.y}
-  />
-)
+class NodeLink extends React.PureComponent {
+  render () {
+    const { source, target } = this.props
+
+    return (
+      <line
+        stroke="var(--pink)"
+        x1={source.x}
+        y1={source.y}
+        x2={target.x}
+        y2={target.y}
+      />
+    )
+  }
+}
 
 export default NodeLink

@@ -22,7 +22,7 @@ export function searchTracks (query) {
 
 export function fetchRecommendations (seed) {
   return fetch(
-    `https://api.spotify.com/v1/recommendations?seed_tracks=${seed}&limit=10`,
+    `https://api.spotify.com/v1/recommendations?seed_tracks=${seed}&limit=5`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   )
 }

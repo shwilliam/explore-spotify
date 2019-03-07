@@ -1,18 +1,22 @@
 import React from 'react'
+import { withHoverContext } from '../context/hover'
 
-const HoverInfo = ({ track, ...props }) => {
-  if (!track) return null
+class HoverInfo extends React.PureComponent {
+  render () {
+    const { hoveredTrack } = this.props.hoverContext
+    if (!hoveredTrack) return null
 
-  return (
-    <section id="hover-info" {...props}>
-      <div className="bold">
-        {track.name}
-      </div>
-      <div>
-        {track.artists && track.artists.map((artist, index) => `${artist.name}${track.artists.length > index + 1 ? ', ' : ''}`)}
-      </div>
-    </section>
-  )
+    return (
+      <section id="hover-info">
+        <div className="bold">
+          {hoveredTrack.name}
+        </div>
+        <div>
+          {hoveredTrack.artists && hoveredTrack.artists.map((artist, index) => `${artist.name}${hoveredTrack.artists.length > index + 1 ? ', ' : ''}`)}
+        </div>
+      </section>
+    )
+  }
 }
 
-export default HoverInfo
+export default withHoverContext(HoverInfo)

@@ -1,9 +1,9 @@
 import React from 'react'
 import { searchTracks } from '../assets/utils/spotify'
 
-import { withTrackContext } from '../context/search'
+import { withSearchContext } from '../context/search'
 
-class SearchForm extends React.Component {
+class SearchForm extends React.PureComponent {
   state = {
     inputQuery: '',
     loading: false
@@ -17,7 +17,7 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit = (event) => {
-    const { trackContext } = this.props
+    const { searchContext } = this.props
     const { inputQuery, loading } = this.state
 
     event.preventDefault()
@@ -44,7 +44,7 @@ class SearchForm extends React.Component {
         } else if (!data.tracks.items.length) {
           alert('No songs matched your search. Please try again.'); // eslint-disable-line
         } else {
-          trackContext.updateSearchResults(data.tracks.items)
+          searchContext.updateSearchResults(data.tracks.items)
         }
       })
       .catch((error) => {
@@ -81,4 +81,4 @@ class SearchForm extends React.Component {
   }
 }
 
-export default withTrackContext(SearchForm)
+export default withSearchContext(SearchForm)

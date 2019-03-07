@@ -11,10 +11,16 @@ const PosedDiv = posed.div({
   }
 })
 
-const DraggableGraphContainer = ({ children }) => (
-  <PosedDiv className="draggable">
-    {children}
-  </PosedDiv>
-)
+class DraggableGraphContainer extends React.PureComponent {
+  render () {
+    const { children, ...props } = this.props
+
+    return (
+      <PosedDiv className="draggable" {...props}>
+        {children}
+      </PosedDiv>
+    )
+  }
+}
 
 export default DraggableGraphContainer

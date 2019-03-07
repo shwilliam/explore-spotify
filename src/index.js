@@ -8,12 +8,21 @@ import './assets/styles/global.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
-import { TrackContextProvider } from './context/search'
+import { SearchContextProvider } from './context/search'
+import { RecommendationsContextProvider } from './context/recommendations'
+import { AudioContextProvider } from './context/audio'
+import { HoverContextProvider } from './context/hover'
 
 ReactDOM.render((
-  <TrackContextProvider>
-    <App />
-  </TrackContextProvider>
+  <SearchContextProvider>
+    <RecommendationsContextProvider>
+      <AudioContextProvider>
+        <HoverContextProvider>
+          <App/>
+        </HoverContextProvider>
+      </AudioContextProvider>
+    </RecommendationsContextProvider>
+  </SearchContextProvider>
 ), document.getElementById('root'))
 
 // TODO: register() [http://bit.ly/CRA-PWA]

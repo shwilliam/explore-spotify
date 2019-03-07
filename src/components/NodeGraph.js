@@ -2,14 +2,18 @@ import React from 'react'
 import { fetchRecommendations } from '../assets/utils/spotify'
 import { initGraph, updateNodesAndLinks, stopForce } from '../assets/utils/d3'
 
+import { withSearchContext } from '../context/search'
+import { withRecommendationsContext } from '../context/recommendations'
+import { withAudioContext } from '../context/audio'
+import { withHoverContext } from '../context/hover'
+
 import Node from './Node'
 import NodeLink from './NodeLink'
 
-class NodeGraph extends React.Component {
+class NodeGraph extends React.PureComponent {
   state = {
-    nodes: this.props.searchResults,
-    links: null,
-    clickedTracks: null,
+    nodes: this.props.searchContext.searchResults,
+    links: [],
     // TODO: make responsive
     width: window.innerWidth * 2,
     height: window.innerHeight * 2
@@ -24,66 +28,94 @@ class NodeGraph extends React.Component {
   }
 
   componentWillUnmount () {
-    this._mounted = false
+    const {
+      playingTrackAudio,
+      pauseTrack
+    } = this.props.audioContext
 
+    this._mounted = false
     stopForce()
-    if (this.preview) this.preview.pause() && this.preview.removeEventListener('canplay', this.playPreview)
+    if (playingTrackAudio) {
+      pauseTrack()
+      playingTrackAudio.removeEventListener('canplay', this.playPreview)
+    }
   }
 
-  updatePlayingNode = (
+  handleNodeClick = (
     { id, name, artists, popularity, previewURL }, { x, y }
   ) => {
-    const { updatePlayingNode } = this.props
-    let { nodes, links, clickedTracks } = this.state
+    const {
+      setPlayingTrack,
+      playingTrackAudio,
+      setPlayingTrackAudio,
+      playTrack,
+      pauseTrack
+    } = this.props.audioContext
+    const {
+      clickedTracks,
+      addClickedTrack
+    } = this.props.recommendationsContext
+    const {
+      hoveredTrack,
+      lastHover
+    } = this.props.hoverContext
+    let { nodes, links } = this.state
 
-    if (!clickedTracks) {
-      clickedTracks = [id]
-      nodes = [{
+    // touch acts as hover (double-click ≅ 500ms)
+    if (hoveredTrack.id !== id || lastHover + 200 > (new Date()).valueOf()) return
+
+    let updatedClickedNodes = clickedTracks.slice()
+    updatedClickedNodes.push(id)
+
+    let updatedNodes = nodes.slice()
+    if (!clickedTracks.length) { // initial select
+      updatedNodes = [{
         id, name, artists, popularity, x, y, previewURL
       }]
-      links = []
-    } else {
-      if (clickedTracks.length === 5) {
-        clickedTracks = clickedTracks.slice(1, 5)
-      }
-      clickedTracks.push(id)
     }
 
-    const clickedNodeIndex = nodes.filter(
+    const clickedNodeIndex = updatedNodes.filter(
       track => track.id === id
     )[0].index || 0
 
-    if (this.preview && previewURL) {
-      this.preview.pause()
-      this.preview.removeEventListener('canplay', this.playPreview)
-    }
     if (previewURL) {
-      this.preview = new Audio()
-      this.preview.src = previewURL
-      this.preview.volume = 0.2
+      if (playingTrackAudio) {
+        pauseTrack()
+        playingTrackAudio.removeEventListener('canplay', this.playPreview)
+      }
+      const newAudio = new Audio()
+      newAudio.src = previewURL
       this.playPreview = () => {
         if (!this._mounted) return
-        this.preview.play()
-        updatePlayingNode(id, name, artists, popularity, previewURL)
+        playTrack()
+        setPlayingTrack(id, name, artists, popularity, previewURL)
+        addClickedTrack(id)
       }
-      this.preview.addEventListener('canplay', this.playPreview)
+      newAudio.addEventListener('canplay', this.playPreview)
+      setPlayingTrackAudio(newAudio)
     }
 
-    fetchRecommendations(clickedTracks.join(','))
+    let recentClickedNodes = updatedClickedNodes.slice()
+    if (updatedClickedNodes.length > 5) {
+      recentClickedNodes = updatedClickedNodes.slice(-5)
+    }
+
+    fetchRecommendations(recentClickedNodes.join(','))
       .then(res => res.json())
       .then(({ tracks }) => {
         tracks.map((track) => {
-          if (nodes.findIndex(node => node.id === track.id) === -1) {
-            nodes.push(track)
+          // filter repeated tracks
+          if (updatedNodes.findIndex(node => node.id === track.id) === -1) {
+            updatedNodes.push(track)
             links.push({
               source: clickedNodeIndex,
-              target: nodes.indexOf(track)
+              target: updatedNodes.indexOf(track)
             })
           }
           return { tracks, links }
         })
 
-        if (this._mounted) updateNodesAndLinks(nodes, links, clickedTracks, state => this.setState(state))
+        if (this._mounted) updateNodesAndLinks(updatedNodes, links, (nodes, links) => this.setState({ nodes, links }))
       })
       .catch((error) => {
         alert('Couldn\'t fetch song recommendations... Please refresh the page.'); // eslint-disable-line
@@ -93,8 +125,9 @@ class NodeGraph extends React.Component {
 
   render () {
     const {
-      updateTempNode
+      hoverContext
     } = this.props
+
     const {
       nodes, links, width, height
     } = this.state
@@ -125,8 +158,8 @@ class NodeGraph extends React.Component {
                 key={`node-${id}`}
                 x={x}
                 y={y}
-                onClick={() => this.updatePlayingNode({ id, name, artists, popularity, previewURL }, { x, y })}
-                onMouseEnter={() => updateTempNode(id, name, artists, popularity, previewURL)}
+                onClick={() => this.handleNodeClick({ id, name, artists, popularity, previewURL }, { x, y })}
+                onMouseEnter={() => hoverContext.setHoveredTrack(id, name, artists, popularity, previewURL)}
               >
                 {name}
               </Node>
@@ -139,4 +172,4 @@ class NodeGraph extends React.Component {
   }
 }
 
-export default NodeGraph
+export default withSearchContext(withRecommendationsContext(withAudioContext(withHoverContext(NodeGraph))))

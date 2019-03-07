@@ -19,14 +19,10 @@ export function initGraph (nodes, width, height) {
   return force
 }
 
-export function updateNodesAndLinks (nodes, links, clickedTracks, setState) {
+export function updateNodesAndLinks (nodes, links, setState) {
   force.nodes(nodes).alpha(2).alphaDecay(0.02).force('link', forceLink().links(links).strength(0.1))
   force.restart()
-  setState({
-    nodes,
-    links,
-    clickedTracks
-  })
+  setState(nodes, links)
   return { nodes, links }
 }
 
