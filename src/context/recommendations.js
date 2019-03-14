@@ -8,11 +8,10 @@ export class RecommendationsContextProvider extends React.Component {
     clickedTracks: []
   }
 
-  addClickedTrack = (id) => {
+  addClickedTrack = (id, name, artists) => {
     this.setState(({ clickedTracks }) => {
       let updatedClickedTracks = clickedTracks.slice()
-      updatedClickedTracks.push(id)
-
+      updatedClickedTracks.push({ id, name, artists })
       return {
         clickedTracks: updatedClickedTracks
       }

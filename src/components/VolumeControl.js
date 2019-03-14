@@ -2,7 +2,7 @@
 import React from 'react'
 import { withAudioContext } from '../context/audio'
 
-class VolumeSlider extends React.PureComponent {
+class VolumeControl extends React.PureComponent {
   render () {
     const { playingTrackAudio, playingVolume, setPlayingVolume } = this.props.audioContext
 
@@ -25,4 +25,4 @@ class VolumeSlider extends React.PureComponent {
   }
 }
 
-export default withAudioContext(VolumeSlider)
+export default withAudioContext(VolumeControl)

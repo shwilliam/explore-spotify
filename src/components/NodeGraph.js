@@ -68,7 +68,7 @@ class NodeGraph extends React.PureComponent {
     if (hoveredTrack.id !== id || lastHover + 200 > (new Date()).valueOf()) return
 
     let updatedClickedNodes = clickedTracks.slice()
-    updatedClickedNodes.push(id)
+    updatedClickedNodes.push({ id, name, artists })
 
     let updatedNodes = nodes.slice()
     if (!clickedTracks.length) { // initial select
@@ -92,8 +92,8 @@ class NodeGraph extends React.PureComponent {
         if (!this._mounted) return
         playTrack()
         setPlayingTrack(id, name, artists, popularity, previewURL)
-        addClickedTrack(id)
       }
+      addClickedTrack(id, name, artists)
       newAudio.addEventListener('canplay', this.playPreview)
       setPlayingTrackAudio(newAudio)
     }
@@ -103,7 +103,7 @@ class NodeGraph extends React.PureComponent {
       recentClickedNodes = updatedClickedNodes.slice(-5)
     }
 
-    fetchRecommendations(recentClickedNodes.join(','))
+    fetchRecommendations(recentClickedNodes.map(track => track.id).join(','))
       .then(res => res.json())
       .then(({ tracks }) => {
         tracks.map((track) => {

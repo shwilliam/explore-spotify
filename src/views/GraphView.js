@@ -1,16 +1,18 @@
 import React from 'react'
 
 import TopHeader from '../components/TopHeader'
+import RecommendationsModal from '../components/RecommendationsModal'
 import ResetButton from '../components/ResetButton'
 import PlayingInfo from '../components/PlayingInfo'
 import HoverInfo from '../components/HoverInfo'
 import DraggableGraphContainer from '../components/DraggableGraphContainer'
 import NodeGraph from '../components/NodeGraph'
-import VolumeSlider from '../components/VolumeSlider'
+import VolumeControl from '../components/VolumeControl'
 
 const GraphView = () => (
   <main role="main">
     <TopHeader>
+      <RecommendationsModal/>
       <ResetButton/>
     </TopHeader>
     <PlayingInfo/>
@@ -18,7 +20,7 @@ const GraphView = () => (
     <DraggableGraphContainer>
       <NodeGraph/>
     </DraggableGraphContainer>
-    <VolumeSlider/>
+    <VolumeControl/>
   </main>
 )
 

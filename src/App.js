@@ -2,7 +2,7 @@
 import React from 'react'
 import queryString from 'query-string'
 import { updateAccessToken, redirectToLogin } from './assets/utils/spotify'
-import { getItem, setItem, clear } from './assets/utils/local-storage'
+import { getItem, setItem } from './assets/utils/local-storage'
 
 import { withSearchContext } from './context/search'
 
@@ -14,12 +14,11 @@ const tokenTimestamp = getItem('token-timestamp')
 const queryToken = queryString.parse(window.location.search).access_token
 
 // expired token
-if (localToken && parseInt(tokenTimestamp) + 1000000 < (new Date()).valueOf()) {
+if (localToken && parseInt(tokenTimestamp) + 100000 < (new Date()).valueOf()) {
   redirectToLogin()
 }
 
 if (queryToken) {
-  clear()
   setItem('token', queryToken)
   setItem('token-timestamp', (new Date()).valueOf())
 
@@ -32,8 +31,9 @@ if (queryToken) {
 
 class App extends React.PureComponent {
   render () {
-    const { searchResults } = this.props.searchContext
+    if (!localToken && !queryToken) return null
 
+    const { searchResults } = this.props.searchContext
     return !searchResults ? <SearchView/> : <GraphView/>
   }
 }

@@ -14,11 +14,19 @@ class Node extends React.PureComponent {
         <circle
           r={radius}
           fill="var(--blue)"
+        />
+        <circle
+          r={radius + 2}
+          fill="none"
           id={`node-${id}`}
         />
         <text fill="var(--pink)">
-          <textPath alignmentBaseline="top" xlinkHref={`#node-${id}`}>
-            {children}
+          <textPath alignmentBaseline="top" href={`#node-${id}`}>
+            {
+              children.length > radius
+                ? children.slice(0, 15) + '...'
+                : children
+            }
           </textPath>
         </text>
         <circle
