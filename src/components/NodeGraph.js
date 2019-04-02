@@ -65,7 +65,7 @@ class NodeGraph extends React.PureComponent {
     let { nodes, links } = this.state
 
     // touch acts as hover (double-click ≅ 500ms)
-    if (hoveredTrack.id !== id || lastHover + 200 > (new Date()).valueOf()) return
+    if ((hoveredTrack && hoveredTrack.id !== id) || lastHover + 200 > (new Date()).valueOf()) return
 
     let updatedClickedNodes = clickedTracks.slice()
     updatedClickedNodes.push({ id, name, artists })
