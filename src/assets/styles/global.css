@@ -168,9 +168,11 @@ input[type="range"]:focus::-ms-thumb {
 }
 
 /* recommendations modal */
+#modal-close-btn,
+#recommendations-export-btn {
+  background-color: transparent;
+}
+
 #modal-close-btn {
-  float: right;
   color: var(--pink);
-  background-color: none;
-  border: 1px solid var(--blue);
 }

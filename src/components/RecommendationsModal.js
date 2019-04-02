@@ -109,7 +109,6 @@ class RecommendationsModal extends React.Component {
             }
           }}
         >
-          <button id="modal-close-btn" onClick={this.closeModal}>close</button>
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -140,6 +139,7 @@ class RecommendationsModal extends React.Component {
             </Droppable>
           </DragDropContext>
           <button id="recommendations-export-btn" onClick={this.exportPlaylist}>export</button>
+          <button id="modal-close-btn" onClick={this.closeModal}>close</button>
         </Modal>
       </>
     )
